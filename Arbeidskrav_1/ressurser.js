@@ -94,3 +94,52 @@ const resources = [
         ]
     },
 ]
+
+const buttons = document.querySelectorAll('.page-button'); //Velger alle elementene med klassen '.page-button', fra index.html. Kilde:https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelectorAll
+    const tabPages = document.querySelectorAll('.tab-page'); //Samme som over, men med '.tab-page'.
+
+    function updateTabContent(index) {//Funksjon for å oppdatere innholdet i tab/fanen basert på hvilken index (hvilken side)
+        const pageContent = resources[index]; // Finner elementet direkte ved hjelp av indeksen
+
+        //Setter inn innholdet spesifisert <h2>, <p> osv. fra ressurser og setter det inn i HTML-en.
+        tabPages[index].innerHTML = `
+            <h2>${pageContent.category}</h2>
+            <p>${pageContent.text}</p>
+            <ul> <!-- Bruker <ul> for å ha en usortert liste som inneholder lenker for hver kilde fra "sources" -->
+                ${pageContent.sources.map(function(source) { //Bruker .map for å lage ny liste med <li>-element for hver "source"
+                    return `<li><a href="${source.url}" target="_blank">${source.title}</a></li>`;
+                }).join('')} <!-- .join() legger til alle listeverdiene sammen. -->
+            </ul>`;
+    }
+
+    buttons.forEach(function(button, index) { //For hver knapp //Kilde for "forEach": https://www.w3schools.com/jsref/jsref_forEach.asp
+        button.addEventListener('click', function() { //Legger til eventlistener på hver knapp
+
+            tabPages.forEach(function(page) { //For hver side/fane
+                page.classList.remove('active'); //Fjern 'active'. Slikt at innholdet ikke vises
+            });
+            buttons.forEach(function(button) { //For hver knapp
+                button.classList.remove('active'); //Fjern 'active'. Slikt at knappen ikke funker eller lyser opp
+            });
+
+            tabPages[index].classList.add('active'); //Legger til funksjonen 'active' på siden som blir trykket på
+            buttons[index].classList.add('active'); //Legger til funksjonen 'active' på knappen som blir trykket på
+
+            updateTabContent(index); //Oppdater innholdet i fanen/siden
+        });
+    });
+
+
+    const htmlTabIndex = resources
+        .map(function(resource, position) { //.map går gjennom hvert element i arrayen
+            if (resource.category === "HTML") { //Spesifiserer hva .map skal sjekke etter. I dette tilfellet er det objekter med kategori "HTML"
+                return position;  //Hvis vi har funnet riktig, returnerer den posisjonen for elementet
+            }
+        })
+        .filter(function(index) { //.filter leter gjennom arrayen som .map har laget
+            return index !== undefined;  //Spesifiserer hva .filter skal lete etter. I dette tilfellet leter vi etter "undefined" verdier, verdier som ikke er HTML. De med "undefined" får ikke bli med.
+        })[0]; //Henter den første verdien fra listen 
+
+    tabPages[htmlTabIndex].classList.add('active');  //Legger til 'active' til HTML-tabben, slik at siden er aktiv når den lastes inn
+    buttons[htmlTabIndex].classList.add('active');  //Legger til 'active' til HTML-knappen, slik at knappen til siden er aktiv når den lastes inn
+    updateTabContent(htmlTabIndex);  //Laster inn innholdet til HTML-siden, slik at innholdet vises ved innlasting
