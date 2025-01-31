@@ -108,7 +108,7 @@ const buttons = document.querySelectorAll('.page-button'); //Velger alle element
             <ul> <!-- Bruker <ul> for å ha en usortert liste som inneholder lenker for hver kilde fra "sources" -->
                 ${pageContent.sources.map(function(source) { //Bruker .map for å lage ny liste med <li>-element for hver "source"
                     return `<li><a href="${source.url}" target="_blank">${source.title}</a></li>`;
-                }).join('')} <!-- .join() legger til alle listeverdiene sammen. -->
+                }).join('')} <!-- .join() legger til alle listeverdiene sammen -->
             </ul>`;
     }
 
@@ -131,9 +131,9 @@ const buttons = document.querySelectorAll('.page-button'); //Velger alle element
 
 
     const htmlTabIndex = resources
-        .map(function(resource, position) { //.map går gjennom hvert element i arrayen
+        .map(function(resource, HTMLIndex) { //.map går gjennom hvert element i arrayen
             if (resource.category === "HTML") { //Spesifiserer hva .map skal sjekke etter. I dette tilfellet er det objekter med kategori "HTML"
-                return position;  //Hvis vi har funnet riktig, returnerer den posisjonen for elementet
+                return HTMLIndex;  //Hvis vi har funnet riktig, returnerer den indexet for elementet
             }
         })
         .filter(function(index) { //.filter leter gjennom arrayen som .map har laget
